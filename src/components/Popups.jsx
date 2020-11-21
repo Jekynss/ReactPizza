@@ -1,6 +1,6 @@
 import React from 'react';
 
-function Popups({items}){
+const Popups = React.memo(({items})=>{
     const [visiblePopup,setVisiblePopup] = React.useState(false);
     const [popupItem,setPopupItem] = React.useState(0);
     const sortRef = React.useRef();
@@ -52,5 +52,5 @@ function Popups({items}){
     </div>}
   </div>);
 
-}
+});
 export default Popups;

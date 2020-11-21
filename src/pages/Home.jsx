@@ -1,17 +1,29 @@
 import React from 'react'
 
 import {Categories, Popup, PizzaBlock} from '../components'; // Если папка Header то ищет index.jsx
+import { useSelector, useDispatch } from "react-redux";
+import { setCategory } from '../redux/actions/filters'
 
-function Home({items}){
+const categoryItems = ['Мясные','Вегетарианская','Гриль','Острые','Закрытые'];
+const popupItems = [{name: 'популярности', type:"popular"},{name:'цене', type:"price"},{name:'алфавиту', type:"abc"}];
+
+function Home(){
+  const dispatch = useDispatch();
+  const items  = useSelector(({pizzas})=>pizzas.items);
+
+  const onSelectCategoty = React.useCallback((index) => {
+    dispatch(setCategory(index));
+  },[]);
+
     return (
     <div className="container">
       <div className="content__top">
-        <Categories onClickItem={(name)=>console.log(name)} items={['Мясные','Вегетарианская','Гриль','Острые','Закрытые']}/>
-        <Popup items={[{name: 'популярности', type:"popular"},{name:'цене', type:"price"},{name:'алфавиту', type:"abc"}]}/>
+        <Categories onClickItem={onSelectCategoty} items={categoryItems}/>
+        <Popup items={popupItems}/>
       </div>
       <h2 className="content__title">Все пиццы</h2>
       <div className="content__items">
-        {items&&items.map((item)=>(<PizzaBlock key={`${item.id}`} {...item}></PizzaBlock>))}
+        {items && items.map((item)=>(<PizzaBlock key={`${item.id}`} {...item}></PizzaBlock>))}
       </div>
     </div>);
 }
