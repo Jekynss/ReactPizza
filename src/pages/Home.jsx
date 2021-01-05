@@ -1,31 +1,58 @@
-import React from 'react'
+import React from "react";
 
-import {Categories, Popup, PizzaBlock} from '../components'; // Если папка Header то ищет index.jsx
+import {
+  Categories,
+  Popup,
+  PizzaBlock,
+  PizzaLoadingBlock,
+} from "../components"; // Если папка Header то ищет index.jsx
 import { useSelector, useDispatch } from "react-redux";
-import { setCategory } from '../redux/actions/filters'
+import { setCategory } from "../redux/actions/filters";
+import { fetchPizzas } from "../redux/actions/pizzas";
 
-const categoryItems = ['Мясные','Вегетарианская','Гриль','Острые','Закрытые'];
-const popupItems = [{name: 'популярности', type:"popular"},{name:'цене', type:"price"},{name:'алфавиту', type:"abc"}];
+const categoryItems = [
+  "Мясные",
+  "Вегетарианская",
+  "Гриль",
+  "Острые",
+  "Закрытые",
+];
+const popupItems = [
+  { name: "популярности", type: "popular" },
+  { name: "цене", type: "price" },
+  { name: "алфавиту", type: "abc" },
+];
 
-function Home(){
+function Home() {
   const dispatch = useDispatch();
-  const items  = useSelector(({pizzas})=>pizzas.items);
+
+  React.useEffect(() => {
+    dispatch(fetchPizzas);
+  }, []);
+
+  const items = useSelector(({ pizzas }) => pizzas.items);
+  const isLoaded = useSelector(({ pizzas }) => pizzas.isLoaded);
 
   const onSelectCategoty = React.useCallback((index) => {
     dispatch(setCategory(index));
-  },[]);
+  }, []);
 
-    return (
+  return (
     <div className="container">
       <div className="content__top">
-        <Categories onClickItem={onSelectCategoty} items={categoryItems}/>
-        <Popup items={popupItems}/>
+        <Categories onClickItem={onSelectCategoty} items={categoryItems} />
+        <Popup items={popupItems} />
       </div>
       <h2 className="content__title">Все пиццы</h2>
       <div className="content__items">
-        {items && items.map((item)=>(<PizzaBlock key={`${item.id}`} {...item}></PizzaBlock>))}
+        {isLoaded
+          ? items?.map((item) => (
+              <PizzaBlock key={`${item.id}`} {...item}></PizzaBlock>
+            ))
+          : Array(10).fill(<PizzaLoadingBlock></PizzaLoadingBlock>)}
       </div>
-    </div>);
+    </div>
+  );
 }
 
 export default Home;
