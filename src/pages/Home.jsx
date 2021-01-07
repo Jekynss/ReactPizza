@@ -26,21 +26,26 @@ const popupItems = [
 function Home() {
   const dispatch = useDispatch();
 
-  React.useEffect(() => {
-    dispatch(fetchPizzas);
-  }, []);
-
   const items = useSelector(({ pizzas }) => pizzas.items);
   const isLoaded = useSelector(({ pizzas }) => pizzas.isLoaded);
+  const { category, sortby } = useSelector(({ filters }) => filters);
 
   const onSelectCategoty = React.useCallback((index) => {
     dispatch(setCategory(index));
   }, []);
 
+  React.useEffect(() => {
+    dispatch(fetchPizzas);
+  }, [category]);
+
   return (
     <div className="container">
       <div className="content__top">
-        <Categories onClickItem={onSelectCategoty} items={categoryItems} />
+        <Categories
+          activeCategory={category}
+          onClickItem={onSelectCategoty}
+          items={categoryItems}
+        />
         <Popup items={popupItems} />
       </div>
       <h2 className="content__title">Все пиццы</h2>
@@ -49,7 +54,11 @@ function Home() {
           ? items?.map((item) => (
               <PizzaBlock key={`${item.id}`} {...item}></PizzaBlock>
             ))
-          : Array(10).fill(<PizzaLoadingBlock></PizzaLoadingBlock>)}
+          : Array(10)
+              .fill(0)
+              .map((elem, index) => (
+                <PizzaLoadingBlock key={index}></PizzaLoadingBlock>
+              ))}
       </div>
     </div>
   );
