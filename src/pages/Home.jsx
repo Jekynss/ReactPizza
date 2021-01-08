@@ -7,7 +7,7 @@ import {
   PizzaLoadingBlock,
 } from "../components"; // Если папка Header то ищет index.jsx
 import { useSelector, useDispatch } from "react-redux";
-import { setCategory } from "../redux/actions/filters";
+import { setCategory, setSortBy } from "../redux/actions/filters";
 import { fetchPizzas } from "../redux/actions/pizzas";
 
 const categoryItems = [
@@ -20,7 +20,7 @@ const categoryItems = [
 const popupItems = [
   { name: "популярности", type: "popular" },
   { name: "цене", type: "price" },
-  { name: "алфавиту", type: "abc" },
+  { name: "алфавиту", type: "name" },
 ];
 
 function Home() {
@@ -28,15 +28,20 @@ function Home() {
 
   const items = useSelector(({ pizzas }) => pizzas.items);
   const isLoaded = useSelector(({ pizzas }) => pizzas.isLoaded);
-  const { category, sortby } = useSelector(({ filters }) => filters);
+  const { category, sortBy } = useSelector(({ filters }) => filters);
 
   const onSelectCategoty = React.useCallback((index) => {
     dispatch(setCategory(index));
   }, []);
 
+  const onSelectSortType = React.useCallback((type) => {
+    console.log(type);
+    dispatch(setSortBy(type));
+  }, []);
+
   React.useEffect(() => {
-    dispatch(fetchPizzas);
-  }, [category]);
+    dispatch(fetchPizzas(category, sortBy));
+  }, [category, sortBy]);
 
   return (
     <div className="container">
@@ -46,7 +51,11 @@ function Home() {
           onClickItem={onSelectCategoty}
           items={categoryItems}
         />
-        <Popup items={popupItems} />
+        <Popup
+          activeSortItem={sortBy}
+          items={popupItems}
+          onClickSortType={onSelectSortType}
+        />
       </div>
       <h2 className="content__title">Все пиццы</h2>
       <div className="content__items">
@@ -54,7 +63,7 @@ function Home() {
           ? items?.map((item) => (
               <PizzaBlock key={`${item.id}`} {...item}></PizzaBlock>
             ))
-          : Array(10)
+          : Array(4)
               .fill(0)
               .map((elem, index) => (
                 <PizzaLoadingBlock key={index}></PizzaLoadingBlock>

@@ -2,7 +2,7 @@ import React from 'react'
 
 const initialState = {
   category: null,
-  sortBy:"популярности"
+  sortBy:"popular"
 };
 
 function filters(state = initialState, action) {
