@@ -38,7 +38,6 @@ ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>
     <Provider store={store}>
-      {console.log(store.getState())}
       <App></App>
       </Provider>
     </BrowserRouter>
