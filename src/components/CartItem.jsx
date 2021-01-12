@@ -1,7 +1,6 @@
 import React from "react";
 
 function Button({ name, type, size, totalPrice, totalCount, onRemove }) {
-  const handleRemove = () => {};
   return (
     <div className="cart__item">
       <div className="cart__item-img">
