@@ -32,7 +32,7 @@ function PizzaBlock({
       name,
       imageUrl,
       price,
-      size: sizesNames[activeSize],
+      size: sizesNames[sizesNames.indexOf(activeSize)],
       type: typesNames[activeType],
     };
     OnAddPizza(pizza);

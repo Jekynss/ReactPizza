@@ -41,6 +41,7 @@ function Home() {
   }, []);
 
   const OnAddPizza = React.useCallback((pizza) => {
+    console.log(pizza);
     dispatch(addPizzaToCart(pizza));
   }, []);
 
@@ -70,7 +71,7 @@ function Home() {
                 key={`${item.id}`}
                 {...item}
                 OnAddPizza={OnAddPizza}
-                addedCount={cartItems[item.id]?.length}
+                addedCount={cartItems[item.id]?.items?.length}
               ></PizzaBlock>
             ))
           : Array(4)
