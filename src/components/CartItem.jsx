@@ -1,6 +1,28 @@
 import React from "react";
+import Button from "./Button";
 
-function Button({ name, type, size, totalPrice, totalCount, onRemove }) {
+function Cart({
+  id,
+  name,
+  type,
+  size,
+  totalPrice,
+  totalCount,
+  onRemove,
+  onMinusButton,
+  onPlusButton,
+}) {
+  const handleRemove = () => {
+    onRemove(id);
+  };
+
+  const handlePlusItem = () => {
+    onPlusButton(id);
+  };
+
+  const handleMinusItem = () => {
+    onMinusButton(id);
+  };
   return (
     <div className="cart__item">
       <div className="cart__item-img">
@@ -17,7 +39,10 @@ function Button({ name, type, size, totalPrice, totalCount, onRemove }) {
         </p>
       </div>
       <div className="cart__item-count">
-        <div className="button button--outline button--circle cart__item-count-minus">
+        <div
+          onClick={handleMinusItem}
+          className="button button--outline button--circle cart__item-count-minus"
+        >
           <svg
             width="10"
             height="10"
@@ -36,7 +61,10 @@ function Button({ name, type, size, totalPrice, totalCount, onRemove }) {
           </svg>
         </div>
         <b>{totalCount}</b>
-        <div className="button button--outline button--circle cart__item-count-plus">
+        <div
+          onClick={handlePlusItem}
+          className="button button--outline button--circle cart__item-count-plus"
+        >
           <svg
             width="10"
             height="10"
@@ -59,7 +87,7 @@ function Button({ name, type, size, totalPrice, totalCount, onRemove }) {
         <b>{totalPrice} ₽</b>
       </div>
       <div className="cart__item-remove">
-        <div className="button button--outline button--circle">
+        <Button onClick={handleRemove} outline className="button--circle">
           <svg
             width="10"
             height="10"
@@ -76,10 +104,10 @@ function Button({ name, type, size, totalPrice, totalCount, onRemove }) {
               fill="#EB5A1E"
             />
           </svg>
-        </div>
+        </Button>
       </div>
     </div>
   );
 }
 
-export default Button;
+export default Cart;

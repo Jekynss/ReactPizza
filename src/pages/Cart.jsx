@@ -3,7 +3,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
 import { CartItem } from "../components";
-import { clearCart, removeCartItem } from "../redux/actions/cart";
+import {
+  clearCart,
+  removeCartItem,
+  plusCartItem,
+  minusCartItem,
+} from "../redux/actions/cart";
 import cartEmptyImage from "../assets/img/empty-cart.png";
 
 function Cart() {
@@ -16,6 +21,14 @@ function Cart() {
 
   const OnRemoveItem = (id) => {
     if (window.confirm("Are you sure?")) dispatch(removeCartItem(id));
+  };
+
+  const onPlusItem = (id) => {
+    dispatch(plusCartItem(id));
+  };
+
+  const onMinusItem = (id) => {
+    dispatch(minusCartItem(id));
   };
 
   return (
@@ -97,16 +110,24 @@ function Cart() {
             </div>
           </div>
           <div className="content__items">
-            {Object.keys(items).map((key) => (
-              <CartItem
-                name={items[key].items[0].name}
-                type={items[key].items[0].type}
-                size={items[key].items[0].size}
-                totalPrice={items[key].totalPrice}
-                totalCount={items[key].totalCount}
-                onRemove={OnRemoveItem}
-              />
-            ))}
+            {Object.keys(items).map((key) =>
+              items[key].items[0] ? (
+                <CartItem
+                  id={items[key].items[0].id}
+                  key={items[key].items[0].id}
+                  name={items[key].items[0].name}
+                  type={items[key].items[0].type}
+                  size={items[key].items[0].size}
+                  totalPrice={items[key].totalPrice}
+                  totalCount={items[key].totalCount}
+                  onMinusButton={onMinusItem}
+                  onPlusButton={onPlusItem}
+                  onRemove={OnRemoveItem}
+                />
+              ) : (
+                ""
+              )
+            )}
           </div>
           <div className="cart__bottom">
             <div className="cart__bottom-details">
@@ -149,7 +170,7 @@ function Cart() {
       ) : (
         <div className="cart cart--empty">
           <h2>
-            Корзина пустая <icon>😕</icon>
+            Корзина пустая <i>😕</i>
           </h2>
           <p>
             Вероятней всего, вы не заказывали ещё пиццу.
